@@ -1,4 +1,4 @@
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, type FieldValues } from 'react-hook-form';
 import { type FormValues } from '../types/schema';
 
 import TextField from '@mui/material/TextField';
@@ -13,7 +13,7 @@ export default function Users() {
   } = useFormContext<FormValues>();
 
   // Form submission handler
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = (data: FieldValues) => {
     console.log(data);
   };
 
@@ -32,7 +32,15 @@ export default function Users() {
           error={!!errors.email}
           helperText={errors.email?.message}
         />
-        <AutocompleteRHF<FormValues> name='state' />
+        <AutocompleteRHF<FormValues>
+          name='states'
+          options={[
+            { id: '1', label: 'Kyiv' },
+            { id: '2', label: 'Lviv' },
+            { id: '3', label: 'Qwe' },
+          ]}
+          label='States'
+        />
       </Stack>
     </form>
   );
