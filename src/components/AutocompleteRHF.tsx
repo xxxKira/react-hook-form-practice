@@ -11,7 +11,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 type Props<T extends FieldValues> = {
   name: Path<T>;
-  options: Option[];
+  options?: Option[];
   label: string;
 };
 
@@ -28,15 +28,16 @@ export default function AutocompleteRHF<T extends FieldValues>({
       name={name}
       render={({ field: { value, onChange, ref }, fieldState: { error } }) => (
         <Autocomplete
-          options={options}
-          value={value.map((id: string) =>
+          options={options || []}
+          value={value.map((id: number) =>
             options?.find((item) => item.id === id)
           )}
           onChange={(_, newValue) => onChange(newValue.map((item) => item.id))}
           getOptionLabel={(option: Option) =>
-            options.find((item) => item.id === option.id)?.label ?? ''
+            options?.find((item) => item.id === option.id)?.label ?? ''
           }
           disableCloseOnSelect
+          disabled={!options?.length}
           multiple
           renderInput={(params) => (
             <TextField
@@ -46,7 +47,6 @@ export default function AutocompleteRHF<T extends FieldValues>({
               error={!!error}
               helperText={error?.message}
               label={label}
-              autoComplete='false'
             />
           )}
           renderOption={(props, option, { selected }) => {

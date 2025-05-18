@@ -12,9 +12,11 @@ export default function UsersProvider() {
     defaultValues,
   });
   return (
-    <FormProvider {...methods}>
-      <Users />
-      <DevTool control={methods.control} />
-    </FormProvider>
+    <div className='w-[60%] py-12'>
+      <FormProvider {...methods}>
+        <Users />
+        <DevTool control={methods.control} />
+      </FormProvider>
+    </div>
   );
 }
