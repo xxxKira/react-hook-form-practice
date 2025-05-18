@@ -34,7 +34,7 @@ export default function CheckboxGroupRHF<T extends FieldValues>({
             {options?.map((option) => (
               <FormControlLabel
                 key={option.id}
-                value={+option.id}
+                value={option.id}
                 control={
                   <Checkbox
                     checked={value.includes(option.id)}

@@ -1,5 +1,5 @@
 import { useFormContext, type FieldValues } from 'react-hook-form';
-import { type FormValues } from '../types/schema';
+import { type Schema } from '../types/schema';
 
 import {
   useCities,
@@ -10,12 +10,16 @@ import {
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
 
+import { Stack } from '@mui/material';
 import AutocompleteRHF from '../../components/AutocompleteRHF';
 import ToggleButtonGroupRHF from '../../components/ToggleButtonGroup';
-import { Stack } from '@mui/material';
-import TextField from '@mui/material/TextField';
 import RadioGroupRHF from '../../components/RadioGroupRHF';
 import CheckboxGroupRHF from '../../components/CheckboxGroupRHF';
+import DateTimePickerRHF from '../../components/DateTimePickerRHF';
+import DateRangePickerRHF from '../../components/DateRangePickerRHF';
+import SliderRHF from '../../components/SliderRHF';
+import SwitchRHF from '../../components/SwitchRHF';
+import TextFieldRHF from '../../components/TextFieldRHF';
 
 export default function Users() {
   const { data: cities, error: getCitiesError } = useCities();
@@ -24,10 +28,9 @@ export default function Users() {
   const { data: skills, error: getSkillsError } = useSkills();
 
   const {
-    register,
     handleSubmit,
-    formState: { errors },
-  } = useFormContext<FormValues>();
+    // formState: { errors },
+  } = useFormContext<Schema>();
 
   // Form submission handler
   const onSubmit = (data: FieldValues) => {
@@ -41,38 +44,34 @@ export default function Users() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Stack sx={{ gap: 2 }}>
-        <TextField
-          label='Name'
-          {...register('name')}
-          error={!!errors.name}
-          helperText={errors.name?.message}
-        />
-        <TextField
-          label='Email'
-          {...register('email')}
-          error={!!errors.email}
-          helperText={errors.email?.message}
-        />
-        <AutocompleteRHF<FormValues>
+        <TextFieldRHF<Schema> label='Name' name='name' />
+        <TextFieldRHF<Schema> label='Email' name='email' />
+        <AutocompleteRHF<Schema>
           name='cities'
           options={cities}
-          label='States'
+          label='Cities'
         />
-        <ToggleButtonGroupRHF<FormValues>
+        <ToggleButtonGroupRHF<Schema>
           name='languages'
           options={languages}
           label='Languages'
         />
-        <RadioGroupRHF<FormValues>
-          name='gender'
-          label='Gender'
-          options={genders}
-        />
-        <CheckboxGroupRHF<FormValues>
+        <RadioGroupRHF<Schema> name='gender' label='Gender' options={genders} />
+        <CheckboxGroupRHF<Schema>
           label='Skills'
           name='skills'
           options={skills}
         />
+        <DateTimePickerRHF<Schema>
+          name='registrationDateAndTime'
+          label='Date'
+        />
+        <DateRangePickerRHF<Schema>
+          name='employmentPeriod'
+          label={'Employment Period'}
+        />
+        <SliderRHF<Schema> name='salaryRange' label='Salary Range' />
+        <SwitchRHF<Schema> name='isTeacher' label='Are you a teacher?' />
       </Stack>
     </form>
   );

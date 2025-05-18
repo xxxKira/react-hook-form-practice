@@ -16,15 +16,23 @@ export const schema = z.object({
     .array(z.number())
     .min(1, { message: 'Select at least 1 element' })
     .max(2),
+  registrationDateAndTime: z.date(),
+  employmentPeriod: z.array(z.date()).min(2).max(2),
+  salaryRange: z.array(z.number()).min(2).max(2),
+  isTeacher: z.boolean(),
 });
 
-export type FormValues = z.infer<typeof schema>;
+export type Schema = z.infer<typeof schema>;
 
-export const defaultValues: FormValues = {
+export const defaultValues: Schema = {
   name: '',
   email: '',
   cities: [],
   languages: [],
   gender: '',
   skills: [],
+  registrationDateAndTime: new Date(),
+  employmentPeriod: [new Date(), new Date()],
+  salaryRange: [0, 2000],
+  isTeacher: false,
 };
