@@ -7,7 +7,7 @@ import {
 import type { Option } from '../types/option';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import RadioGroup from '@mui/material/RadioGroup';
+import RadioGroup, { type RadioGroupProps } from '@mui/material/RadioGroup';
 import FormHelperText from '@mui/material/FormHelperText';
 import { FormControlLabel, Radio } from '@mui/material';
 
@@ -15,12 +15,13 @@ type Props<T extends FieldValues> = {
   name: Path<T>;
   options?: Option[];
   label: string;
-};
+} & Pick<RadioGroupProps, 'aria-disabled'>;
 
 export default function RadioGroupRHF<T extends FieldValues>({
   name,
   options,
   label,
+  ...props
 }: Props<T>) {
   const { control } = useFormContext<T>();
 
@@ -31,7 +32,7 @@ export default function RadioGroupRHF<T extends FieldValues>({
       render={({ field: { value, ...otherField }, fieldState: { error } }) => (
         <FormControl {...otherField} error={!!error}>
           <FormLabel>{label}</FormLabel>
-          <RadioGroup value={value}>
+          <RadioGroup value={value} {...props}>
             {options?.map((option) => (
               <FormControlLabel
                 key={option.id}

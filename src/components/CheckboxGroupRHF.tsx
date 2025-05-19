@@ -8,18 +8,24 @@ import type { Option } from '../types/option';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import FormHelperText from '@mui/material/FormHelperText';
-import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
+import {
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  type FormGroupProps,
+} from '@mui/material';
 
 type Props<T extends FieldValues> = {
   name: Path<T>;
   options?: Option[];
   label: string;
-};
+} & Pick<FormGroupProps, 'aria-disabled'>;
 
 export default function CheckboxGroupRHF<T extends FieldValues>({
   name,
   options,
   label,
+  ...props
 }: Props<T>) {
   const { control } = useFormContext<T>();
 
@@ -30,7 +36,7 @@ export default function CheckboxGroupRHF<T extends FieldValues>({
       render={({ field: { value, onChange }, fieldState: { error } }) => (
         <FormControl error={!!error}>
           <FormLabel>{label}</FormLabel>
-          <FormGroup>
+          <FormGroup {...props}>
             {options?.map((option) => (
               <FormControlLabel
                 key={option.id}

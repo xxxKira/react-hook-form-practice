@@ -4,16 +4,17 @@ import {
   type FieldValues,
   type Path,
 } from 'react-hook-form';
-import { Slider, Typography } from '@mui/material';
+import { Slider, Typography, type SliderProps } from '@mui/material';
 
 type Props<T extends FieldValues> = {
   name: Path<T>;
   label: string;
-};
+} & Pick<SliderProps, 'min' | 'max'>;
 
 export default function SliderRHF<T extends FieldValues>({
   name,
   label,
+  ...props
 }: Props<T>) {
   const { control } = useFormContext();
 
@@ -24,7 +25,7 @@ export default function SliderRHF<T extends FieldValues>({
       render={({ field }) => (
         <>
           <Typography>{label}</Typography>
-          <Slider {...field} valueLabelDisplay='auto' max={3000} min={100} />
+          <Slider {...field} valueLabelDisplay='auto' {...props} />
         </>
       )}
     />

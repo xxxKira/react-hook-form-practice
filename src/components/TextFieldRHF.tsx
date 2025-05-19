@@ -1,4 +1,4 @@
-import { TextField } from '@mui/material';
+import { TextField, type TextFieldProps } from '@mui/material';
 import {
   Controller,
   useFormContext,
@@ -8,12 +8,11 @@ import {
 
 type Props<T extends FieldValues> = {
   name: Path<T>;
-  label: string;
-};
+} & Pick<TextFieldProps, 'label' | 'disabled'>;
 
 export default function TextFieldRHF<T extends FieldValues>({
   name,
-  label,
+  ...props
 }: Props<T>) {
   const { control } = useFormContext();
 
@@ -26,7 +25,7 @@ export default function TextFieldRHF<T extends FieldValues>({
           {...field}
           error={!!error}
           helperText={error?.message}
-          label={label}
+          {...props}
         />
       )}
     />

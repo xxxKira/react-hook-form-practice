@@ -13,12 +13,14 @@ type Props<T extends FieldValues> = {
   name: Path<T>;
   options?: Option[];
   label: string;
+  disabled?: boolean;
 };
 
 export default function AutocompleteRHF<T extends FieldValues>({
   name,
   options,
   label,
+  disabled,
 }: Props<T>) {
   const { control } = useFormContext();
 
@@ -37,7 +39,7 @@ export default function AutocompleteRHF<T extends FieldValues>({
             options?.find((item) => item.id === option.id)?.label ?? ''
           }
           disableCloseOnSelect
-          disabled={!options?.length}
+          disabled={disabled}
           multiple
           renderInput={(params) => (
             <TextField

@@ -11,18 +11,20 @@ import {
   FormLabel,
   ToggleButton,
   ToggleButtonGroup,
+  type ToggleButtonGroupProps,
 } from '@mui/material';
 
 type Props<T extends FieldValues> = {
   name: Path<T>;
   options?: Option[];
   label: string;
-};
+} & Pick<ToggleButtonGroupProps, 'disabled'>;
 
 export default function ToggleButtonGroupRHF<T extends FieldValues>({
   name,
   options,
   label,
+  ...props
 }: Props<T>) {
   const { control } = useFormContext<T>();
 
@@ -39,6 +41,7 @@ export default function ToggleButtonGroupRHF<T extends FieldValues>({
           <ToggleButtonGroup
             onChange={(_, newValue) => newValue.length && onChange(newValue)}
             value={value.length ? value : [options?.[0].id]}
+            {...props}
           >
             {options?.map((option) => (
               <ToggleButton

@@ -22,15 +22,28 @@ import SwitchRHF from '../../components/SwitchRHF';
 import TextFieldRHF from '../../components/TextFieldRHF';
 
 export default function Users() {
-  const { data: cities, error: getCitiesError } = useCities();
-  const { data: languages, error: getLanguagesError } = useLanguages();
-  const { data: genders, error: getGendersError } = useGenders();
-  const { data: skills, error: getSkillsError } = useSkills();
-
   const {
-    handleSubmit,
-    // formState: { errors },
-  } = useFormContext<Schema>();
+    data: cities,
+    error: getCitiesError,
+    isPending: isCitiesLoading,
+  } = useCities();
+  const {
+    data: languages,
+    error: getLanguagesError,
+    isPending: isLanguagesLoading,
+  } = useLanguages();
+  const {
+    data: genders,
+    error: getGendersError,
+    isPending: isGendersLoading,
+  } = useGenders();
+  const {
+    data: skills,
+    error: getSkillsError,
+    isPending: isSkillsLoading,
+  } = useSkills();
+
+  const { handleSubmit } = useFormContext<Schema>();
 
   // Form submission handler
   const onSubmit = (data: FieldValues) => {
@@ -50,17 +63,25 @@ export default function Users() {
           name='cities'
           options={cities}
           label='Cities'
+          disabled={isCitiesLoading}
         />
         <ToggleButtonGroupRHF<Schema>
           name='languages'
           options={languages}
           label='Languages'
+          disabled={isLanguagesLoading}
         />
-        <RadioGroupRHF<Schema> name='gender' label='Gender' options={genders} />
+        <RadioGroupRHF<Schema>
+          name='gender'
+          label='Gender'
+          options={genders}
+          aria-disabled={isGendersLoading}
+        />
         <CheckboxGroupRHF<Schema>
           label='Skills'
           name='skills'
           options={skills}
+          aria-disabled={isSkillsLoading}
         />
         <DateTimePickerRHF<Schema>
           name='registrationDateAndTime'
@@ -70,7 +91,12 @@ export default function Users() {
           name='employmentPeriod'
           label={'Employment Period'}
         />
-        <SliderRHF<Schema> name='salaryRange' label='Salary Range' />
+        <SliderRHF<Schema>
+          name='salaryRange'
+          label='Salary Range'
+          min={0}
+          max={3000}
+        />
         <SwitchRHF<Schema> name='isTeacher' label='Are you a teacher?' />
       </Stack>
     </form>
