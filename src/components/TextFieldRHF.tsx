@@ -8,7 +8,7 @@ import {
 
 type Props<T extends FieldValues> = {
   name: Path<T>;
-} & Pick<TextFieldProps, 'label' | 'disabled'>;
+} & Pick<TextFieldProps, 'label' | 'disabled' | 'type'>;
 
 export default function TextFieldRHF<T extends FieldValues>({
   name,

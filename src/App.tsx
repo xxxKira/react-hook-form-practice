@@ -4,7 +4,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 function App() {
   return (
-    <div className='w-screen h-screen flex justify-center content-center overflow-auto'>
+    <div className='py-12 flex justify-center content-center overflow-auto'>
       <UsersProvider />
       <ReactQueryDevtools initialIsOpen={false} />
       <ToastContainer

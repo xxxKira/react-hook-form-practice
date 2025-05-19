@@ -1,5 +1,10 @@
-import { useFormContext, type FieldValues } from 'react-hook-form';
-import { type Schema } from '../types/schema';
+import {
+  useFieldArray,
+  useFormContext,
+  useWatch,
+  type FieldValues,
+} from 'react-hook-form';
+import { defaultValues, type Schema } from '../types/schema';
 
 import {
   useCities,
@@ -7,10 +12,8 @@ import {
   useLanguages,
   useSkills,
 } from '../services/queries';
-import { toast } from 'react-toastify';
-import { useEffect } from 'react';
 
-import { Stack } from '@mui/material';
+import { Stack, Button, Container } from '@mui/material';
 import AutocompleteRHF from '../../components/AutocompleteRHF';
 import ToggleButtonGroupRHF from '../../components/ToggleButtonGroup';
 import RadioGroupRHF from '../../components/RadioGroupRHF';
@@ -20,6 +23,7 @@ import DateRangePickerRHF from '../../components/DateRangePickerRHF';
 import SliderRHF from '../../components/SliderRHF';
 import SwitchRHF from '../../components/SwitchRHF';
 import TextFieldRHF from '../../components/TextFieldRHF';
+import { useEffect } from 'react';
 
 export default function Users() {
   const {
@@ -43,7 +47,21 @@ export default function Users() {
     isPending: isSkillsLoading,
   } = useSkills();
 
-  const { handleSubmit } = useFormContext<Schema>();
+  const { handleSubmit, control, unregister, reset } = useFormContext<Schema>();
+
+  const isTeacher = useWatch({
+    control,
+    name: 'isTeacher',
+  });
+
+  const { append, fields, remove, replace } = useFieldArray<Schema>({
+    control,
+    name: 'teacher.students',
+  });
+
+  function handleReset() {
+    reset(defaultValues);
+  }
 
   // Form submission handler
   const onSubmit = (data: FieldValues) => {
@@ -51,11 +69,14 @@ export default function Users() {
   };
 
   useEffect(() => {
-    if (getCitiesError) toast.error(getCitiesError.message);
-  }, [getCitiesError]);
+    if (!isTeacher) {
+      replace([]);
+      unregister('teacher');
+    }
+  }, [isTeacher, replace, unregister]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <Container maxWidth='sm' component='form'>
       <Stack sx={{ gap: 2 }}>
         <TextFieldRHF<Schema> label='Name' name='name' />
         <TextFieldRHF<Schema> label='Email' name='email' />
@@ -98,7 +119,53 @@ export default function Users() {
           max={3000}
         />
         <SwitchRHF<Schema> name='isTeacher' label='Are you a teacher?' />
+
+        {isTeacher && (
+          <Stack sx={{ gap: 2 }}>
+            <TextFieldRHF<Schema>
+              label='Experience'
+              name='teacher.experience'
+              disabled={!isTeacher}
+              type='number'
+            />
+            <TextFieldRHF<Schema>
+              label='Subject'
+              name='teacher.subject'
+              disabled={!isTeacher}
+            />
+            <Button
+              variant='text'
+              color='primary'
+              type='button'
+              onClick={() => append({ name: '' })}
+            >
+              Add Student
+            </Button>
+          </Stack>
+        )}
+        {fields.map((field, index) => {
+          return (
+            <Stack key={field.id} sx={{ gap: 2 }}>
+              <TextFieldRHF<Schema>
+                label='Student Name'
+                name={`teacher.students.${index}.name`}
+              />
+              <Button
+                variant='text'
+                color='error'
+                type='button'
+                onClick={() => remove(index)}
+              >
+                Remove Student
+              </Button>
+            </Stack>
+          );
+        })}
       </Stack>
-    </form>
+      <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Button type='submit'>New user</Button>
+        <Button onClick={handleReset}>Reset</Button>
+      </Stack>
+    </Container>
   );
 }
