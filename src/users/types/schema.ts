@@ -40,11 +40,7 @@ export const schema = z
       }),
       z.object({
         isTeacher: z.literal(true),
-        teacher: z.object({
-          subject: z.string().min(1),
-          experience: z.string().min(1),
-          students: z.array(z.object({ name: z.string().min(4) })),
-        }),
+        students: z.array(z.object({ name: z.string().min(4) })),
         // students: z.array(z.object({ name: z.string().min(4) })),
       }),
     ])

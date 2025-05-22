@@ -11,6 +11,7 @@ import {
   useGenders,
   useLanguages,
   useSkills,
+  useUsers,
 } from '../services/queries';
 
 import { Stack, Button, Container } from '@mui/material';
@@ -46,6 +47,9 @@ export default function Users() {
     error: getSkillsError,
     isPending: isSkillsLoading,
   } = useSkills();
+  const { data: users } = useUsers();
+
+  console.log(users);
 
   const { handleSubmit, control, unregister, reset } = useFormContext<Schema>();
 
@@ -56,7 +60,7 @@ export default function Users() {
 
   const { append, fields, remove, replace } = useFieldArray<Schema>({
     control,
-    name: 'teacher.students',
+    name: 'students',
   });
 
   function handleReset() {
@@ -71,7 +75,7 @@ export default function Users() {
   useEffect(() => {
     if (!isTeacher) {
       replace([]);
-      unregister('teacher');
+      unregister('students');
     }
   }, [isTeacher, replace, unregister]);
 
@@ -109,7 +113,7 @@ export default function Users() {
           label='Date'
         />
         <DateRangePickerRHF<Schema>
-          name='employmentPeriod'
+          name='formerEmploymentPeriod'
           label={'Employment Period'}
         />
         <SliderRHF<Schema>
@@ -121,34 +125,21 @@ export default function Users() {
         <SwitchRHF<Schema> name='isTeacher' label='Are you a teacher?' />
 
         {isTeacher && (
-          <Stack sx={{ gap: 2 }}>
-            <TextFieldRHF<Schema>
-              label='Experience'
-              name='teacher.experience'
-              disabled={!isTeacher}
-              type='number'
-            />
-            <TextFieldRHF<Schema>
-              label='Subject'
-              name='teacher.subject'
-              disabled={!isTeacher}
-            />
-            <Button
-              variant='text'
-              color='primary'
-              type='button'
-              onClick={() => append({ name: '' })}
-            >
-              Add Student
-            </Button>
-          </Stack>
+          <Button
+            variant='text'
+            color='primary'
+            type='button'
+            onClick={() => append({ name: '' })}
+          >
+            Add Student
+          </Button>
         )}
         {fields.map((field, index) => {
           return (
             <Stack key={field.id} sx={{ gap: 2 }}>
               <TextFieldRHF<Schema>
                 label='Student Name'
-                name={`teacher.students.${index}.name`}
+                name={`students.${index}.name`}
               />
               <Button
                 variant='text'

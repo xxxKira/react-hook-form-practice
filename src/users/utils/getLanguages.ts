@@ -6,7 +6,7 @@ export async function getLanguages() {
     .select('*');
 
   if (error) {
-    throw new Error(`There was problem with fetching genders.`);
+    throw new Error(`There was problem with fetching languages.`);
   }
 
   return languages;
