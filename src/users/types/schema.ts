@@ -19,17 +19,18 @@ export const schema = z
         .min(1, { message: 'Select at least 1 element' })
         .max(2),
       registrationDateAndTime: z.date(),
-      formerEmploymentPeriod: z.array(z.date()).min(2).max(2),
-      salaryRange: z.array(z.number()).min(2).max(2),
-      // isTeacher: z.boolean(),
+      // formerEmploymentPeriod: z.array(z.date(), z.date()).min(2).max(2),
+      formerEmploymentPeriod: z.tuple([z.date(), z.date()]),
+      // salaryRange: z.array(z.number()).min(2).max(2),
+      salaryRange: z.tuple([z.number(), z.number()]),
     }),
     z.discriminatedUnion('variant', [
       z.object({
         variant: z.literal('create'),
       }),
       z.object({
-        variant: z.literal('update'),
-        id: z.string().min(1),
+        variant: z.literal('edit'),
+        id: z.number().min(1),
       }),
     ])
   )
@@ -41,7 +42,6 @@ export const schema = z
       z.object({
         isTeacher: z.literal(true),
         students: z.array(z.object({ name: z.string().min(4) })),
-        // students: z.array(z.object({ name: z.string().min(4) })),
       }),
     ])
   );

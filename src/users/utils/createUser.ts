@@ -1,14 +1,12 @@
 import { supabase } from '../../supabase/supabase';
-import type { Schema } from '../types/schema';
+import type { Common } from '../../types/apiTypes';
 
-export async function createUser(data: Schema) {
-  const { data: user, error } = await supabase
-    .from('users')
-    .insert(data)
-    .select();
+export async function createUser(data: Common) {
+  const { data: user, error } = await supabase.from('users').insert(data);
 
   if (error) {
-    throw new Error(`There was problem with creating user.`);
+    console.error(error.message);
+    throw new Error(error.message);
   }
 
   return { user };

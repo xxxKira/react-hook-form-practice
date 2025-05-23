@@ -12,11 +12,11 @@ export default function UsersProvider() {
     defaultValues,
   });
   return (
-    <div className='w-[60%]'>
+    <>
       <FormProvider {...methods}>
         <Users />
         <DevTool control={methods.control} />
       </FormProvider>
-    </div>
+    </>
   );
 }

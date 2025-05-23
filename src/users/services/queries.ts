@@ -4,6 +4,7 @@ import { getLanguages } from '../utils/getLanguages';
 import { getSkills } from '../utils/getSkills';
 import { getGenders } from '../utils/getGenders';
 import { getUsers } from '../utils/getUsers';
+import { getUser } from '../utils/getUser';
 
 export function useCities() {
   const { data, isPending, error } = useQuery({
@@ -42,10 +43,30 @@ export function useGenders() {
 }
 
 export function useUsers() {
-  const { data, isPending, error } = useQuery({
+  const {
+    data,
+    isPending: isLoading,
+    error,
+  } = useQuery({
     queryKey: ['users'],
     queryFn: getUsers,
+    retry: false,
+    refetchInterval: 1000,
   });
 
-  return { data, isPending, error };
+  return { data, isLoading, error };
+}
+
+export function useUser(id: number) {
+  const { data, isFetching: isLoading } = useQuery({
+    queryKey: ['user', { id }],
+    queryFn: () => getUser(id),
+    retry: false,
+    enabled: !!id,
+  });
+
+  return {
+    data,
+    isLoading,
+  };
 }
