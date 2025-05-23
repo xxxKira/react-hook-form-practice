@@ -1,5 +1,5 @@
 # Practice RHF + Zod
 
-React Hook Form, Zod, MUI, Lodash, Date-fns, React Query
+Technologies: React Hook Form, MUI, Lodash, Date-fns, React Query, Zod, Toastify, supabase
 
 ## qwe
