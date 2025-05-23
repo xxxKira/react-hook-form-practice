@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createUser } from '../utils/createUser';
 import { toast } from 'react-toastify';
 import type { Common } from '../../types/apiTypes';
-import { updateUser } from '../utils/updateUSer';
+import { updateUser } from '../utils/updateUser';
 import { deleteUser } from '../utils/deleteUser';
 
 export function useCreateUser() {
